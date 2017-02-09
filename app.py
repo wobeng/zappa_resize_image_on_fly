@@ -31,7 +31,8 @@ def image(name, width, height, ext):
 
     img = img.resize((width, height), Image.ANTIALIAS)
     buffer = cStringIO.StringIO()
-    img.save(buffer, format=ext.replace("jpg", "jpeg").capitalize())
+    format = "jpeg" if ext == "jpg" else ext
+    img.save(buffer, format=format.capitalize())
 
     response = make_response(base64.b64encode(buffer.getvalue()))
     response.headers['Content-Type'] = "image/" + ext
