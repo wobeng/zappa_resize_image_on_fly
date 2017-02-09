@@ -1,7 +1,8 @@
 # zappa_resize_image_on_fly
+
 Resize image on the fly using flask, zappa, pillow, opencv-python
 
-you change the width, height and image type on the fly on the fly
+you can change the width, height and image type on the fly
 
 examples:
 
