@@ -1,22 +1,38 @@
-from flask import Flask
-
-
-import base64
 import cStringIO
+import io
 
 from PIL import Image
+from flask import Flask, send_file
 from flask import make_response
 
 from detect_face import detect_face
 
 app = Flask(__name__)
 
+
+@app.route('/world')
+def hello_world():
+    return 'Hello, World!'
+
+
+@app.route('/example')
+def example():
+    """Serves raw image image."""
+
+    with open("example", 'rb') as bites:
+        return send_file(io.BytesIO(bites.read()),
+                         attachment_filename='example.jpeg',
+                         mimetype='image/jpg')
+
+
 @app.route('/image/<name>/<int:width>x<int:height>.<ext>', methods=['GET'])
 def image(name, width, height, ext):
-    face = detect_face(name)
+    """Serves image image according to params."""
+
+    face_box = detect_face(name)
     img = Image.open(name)
-    if face:
-        img2 = img.crop((face))
+    if face_box:
+        img2 = img.crop((face_box))
         img = img2
 
     if width == 0 and height != 0:
@@ -30,10 +46,11 @@ def image(name, width, height, ext):
         height = img.size[1]
 
     img = img.resize((width, height), Image.ANTIALIAS)
+
     buffer = cStringIO.StringIO()
     format = "jpeg" if ext == "jpg" else ext
     img.save(buffer, format=format.capitalize())
 
-    response = make_response(base64.b64encode(buffer.getvalue()))
+    response = make_response(buffer.getvalue())
     response.headers['Content-Type'] = "image/" + ext
     return response

@@ -1,8 +1,8 @@
-import os
 import cv2
+import os
+
 
 def detect_face(imagePath):
-
     # Get user supplied values
     cascPath = os.path.join(os.path.dirname(__file__), "haarcascade_frontalface_default.xml")
 
