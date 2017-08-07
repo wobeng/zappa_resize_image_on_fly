@@ -1,4 +1,3 @@
-import cStringIO
 import io
 
 from PIL import Image
@@ -6,6 +5,11 @@ from flask import Flask, send_file
 from flask import make_response
 
 from detect_face import detect_face
+
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 app = Flask(__name__)
 
@@ -32,7 +36,7 @@ def image(name, width, height, ext):
     face_box = detect_face(name)
     img = Image.open(name)
     if face_box:
-        img2 = img.crop((face_box))
+        img2 = img.crop(face_box)
         img = img2
 
     if width == 0 and height != 0:
@@ -47,9 +51,9 @@ def image(name, width, height, ext):
 
     img = img.resize((width, height), Image.ANTIALIAS)
 
-    buffer = cStringIO.StringIO()
-    format = "jpeg" if ext == "jpg" else ext
-    img.save(buffer, format=format.capitalize())
+    buffer = StringIO()
+    image_format = "jpeg" if ext == "jpg" else ext
+    img.save(buffer, format=image_format.capitalize())
 
     response = make_response(buffer.getvalue())
     response.headers['Content-Type'] = "image/" + ext
