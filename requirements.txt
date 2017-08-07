@@ -1,4 +1,4 @@
 Flask
 Pillow
 opencv-python
-git+ssh://git@github.com/wobeng/Zappa.git@master
+Zappa
