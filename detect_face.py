@@ -1,6 +1,6 @@
 import os
 
-from cv2.cv2 import CascadeClassifier, imread, cvtColor, COLOR_BGR2GRAY
+from cv2.cv2 import CascadeClassifier, imread
 
 
 def detect_face(image_path):
@@ -10,9 +10,8 @@ def detect_face(image_path):
     # Create the haar cascade
     face_cascade = CascadeClassifier(casc_path)
 
-    # Read the image
-    image = imread(image_path)
-    gray = cvtColor(image, COLOR_BGR2GRAY)
+    # Read the image as greyscale
+    gray = imread(image_path, 0)
 
     # Detect faces in the image
     faces = face_cascade.detectMultiScale(
