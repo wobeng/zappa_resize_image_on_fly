@@ -1,27 +1,28 @@
-from io import BytesIO
-
+import os
 from PIL import Image
 from flask import Flask, send_file
 from flask import make_response
+from io import BytesIO
 
 from detect_face import detect_face
 
-
 app = Flask(__name__)
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+pic_path = os.path.join(dir_path, 'example')
 
 
 @app.route('/example')
 def example():
     """Serves raw image image."""
-
-    with open("example", 'rb') as bites:
+    with open(os.path.join(dir_path, 'example'), 'rb') as bites:
         return send_file(BytesIO(bites.read()),
-                         attachment_filename='example.jpeg',
+                         attachment_filename='example.jpg',
                          mimetype='image/jpg')
 
 
-@app.route('/image/<name>/<face_only>/<int:width>x<int:height>.<ext>', methods=['GET'])
-def image(name, face_only, width, height, ext):
+@app.route('/image/<face_only>/<int:width>x<int:height>.<ext>', methods=['GET'])
+def image(face_only, width, height, ext, name=pic_path):
     """Serves image image according to params."""
 
     face_box = detect_face(name)
@@ -52,4 +53,4 @@ def image(name, face_only, width, height, ext):
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0')
