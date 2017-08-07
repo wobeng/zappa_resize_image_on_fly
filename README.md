@@ -4,9 +4,9 @@ Resize image on the fly using flask, zappa, pillow, opencv-python
 
 you can change the width, height and image type on the fly
 
-usage `/image/{filename}/full/{width pixels}x{height pixels}.{extension}`
+usage `/image/full/{width pixels}x{height pixels}.{extension}`
 
-usage for face box resize `/image/{filename}/face/{width pixels}x{height pixels}.{extension}`
+usage for face box resize `/image/face/{width pixels}x{height pixels}.{extension}`
 
 examples:
 
