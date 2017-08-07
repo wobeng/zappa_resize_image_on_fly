@@ -10,11 +10,6 @@ from detect_face import detect_face
 app = Flask(__name__)
 
 
-@app.route('/world')
-def hello_world():
-    return 'Hello, World!'
-
-
 @app.route('/example')
 def example():
     """Serves raw image image."""
@@ -25,13 +20,13 @@ def example():
                          mimetype='image/jpg')
 
 
-@app.route('/image/<name>/<int:width>x<int:height>.<ext>', methods=['GET'])
-def image(name, width, height, ext):
+@app.route('/image/<name>/<face_only>/<int:width>x<int:height>.<ext>', methods=['GET'])
+def image(name, face_only, width, height, ext):
     """Serves image image according to params."""
 
     face_box = detect_face(name)
     img = Image.open(name)
-    if face_box:
+    if face_box and face_only == 'face':
         img2 = img.crop(face_box)
         img = img2
 
