@@ -1,4 +1,4 @@
-import io
+from io import BytesIO
 
 from PIL import Image
 from flask import Flask, send_file
@@ -6,10 +6,6 @@ from flask import make_response
 
 from detect_face import detect_face
 
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from io import StringIO
 
 app = Flask(__name__)
 
@@ -24,7 +20,7 @@ def example():
     """Serves raw image image."""
 
     with open("example", 'rb') as bites:
-        return send_file(io.BytesIO(bites.read()),
+        return send_file(BytesIO(bites.read()),
                          attachment_filename='example.jpeg',
                          mimetype='image/jpg')
 
@@ -51,10 +47,14 @@ def image(name, width, height, ext):
 
     img = img.resize((width, height), Image.ANTIALIAS)
 
-    buffer = StringIO()
+    buffer = BytesIO()
     image_format = "jpeg" if ext == "jpg" else ext
     img.save(buffer, format=image_format.capitalize())
 
     response = make_response(buffer.getvalue())
     response.headers['Content-Type'] = "image/" + ext
     return response
+
+
+if __name__ == "__main__":
+    app.run()
